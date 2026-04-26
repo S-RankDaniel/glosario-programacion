@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<title>TESJO - Glosario Programación Básica (IEEE 610.12)</title>
+
+<style>
+/* --- CONFIGURACIÓN BASE Y FONDO --- */
+body {
+    margin: 0;
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    color: white;
+    overflow: hidden;
+    background-color: #050505;
+}
+
+canvas { position: fixed; top: 0; left: 0; z-index: -2; }
+
+.nebula {
+    position: fixed; width: 100%; height: 100%;
+    background: radial-gradient(circle at 30% 30%, rgba(0,102,255,0.2), transparent),
+                radial-gradient(circle at 70% 70%, rgba(147,51,234,0.2), transparent);
+    z-index: -1;
+}
+
+/* --- ENCABEZADO --- */
+header {
+    background: rgba(0, 0, 0, 0.7);
+    backdrop-filter: blur(10px);
+    padding: 15px;
+    text-align: center;
+    border-bottom: 2px solid #3b82f6;
+    z-index: 10;
+}
+
+header h1 {
+    margin: 5px 0;
+    font-size: 22px;
+    animation: tituloGlow 2s infinite alternate;
+}
+
+.info-academica { font-size: 12px; color: #aaa; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 1px; }
+
+@keyframes tituloGlow {
+    from { text-shadow: 0 0 5px cyan; }
+    to { text-shadow: 0 0 20px blue, 0 0 30px purple; }
+}
+
+.nombres { font-size: 11px; margin-top: 10px; display: flex; justify-content: center; gap: 15px; flex-wrap: wrap; }
+.nombres span { opacity: 0; animation: aparecer 1s forwards; color: #00ff88; font-weight: bold; }
+.nombres span:nth-child(1) { animation-delay: .5s; }
+.nombres span:nth-child(2) { animation-delay: 1s; }
+.nombres span:nth-child(3) { animation-delay: 1.5s; }
+.nombres span:nth-child(4) { animation-delay: 2s; }
+.nombres span:nth-child(5) { animation-delay: 2.5s; }
+
+@keyframes aparecer {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* --- LAYOUT PRINCIPAL (GLASSMORPHISM) --- */
+.container {
+    display: flex;
+    height: calc(100vh - 165px);
+    padding: 10px;
+    gap: 15px;
+}
+
+/* --- MENÚ LATERAL --- */
+.menu {
+    width: 25%;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    overflow-y: auto;
+    padding: 15px;
+}
+
+/* Scrollbar Personalizada */
+.menu::-webkit-scrollbar { width: 5px; }
+.menu::-webkit-scrollbar-thumb { background: #3b82f6; border-radius: 10px; }
+
+#buscador {
+    width: 90%;
+    padding: 12px;
+    margin-bottom: 15px;
+    border: 1px solid rgba(255,255,255,0.1);
+    border-radius: 8px;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    transition: all 0.3s ease;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+}
+
+#buscador:focus {
+    outline: none;
+    border-color: #00ff88;
+    box-shadow: 0 0 10px rgba(0, 255, 136, 0.4);
+    background: #000;
+}
+
+.menu button {
+    width: 100%;
+    padding: 12px;
+    margin: 4px 0;
+    border: none;
+    background: rgba(255, 255, 255, 0.03);
+    color: #ccc;
+    cursor: pointer;
+    text-align: left;
+    transition: all 0.3s ease;
+    border-radius: 8px;
+    border-left: 0px solid #3b82f6;
+}
+
+.menu button:hover {
+    background: rgba(59, 130, 246, 0.2);
+    color: white;
+    transform: translateX(8px);
+    border-left: 4px solid #00ff88;
+    box-shadow: 0 0 15px rgba(0, 255, 136, 0.2);
+}
+
+/* --- CONTENIDO PRINCIPAL --- */
+.content {
+    width: 75%;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 15px;
+    padding: 35px;
+    overflow-y: auto;
+}
+
+.animar {
+    animation: slideUpFade 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94) both;
+}
+
+@keyframes slideUpFade {
+    0% { opacity: 0; transform: translateY(20px); }
+    100% { opacity: 1; transform: translateY(0); }
+}
+
+#titulo {
+    font-size: 45px;
+    color: #00ff88;
+    margin: 0 0 20px 0;
+    text-shadow: 0 0 15px rgba(0, 255, 136, 0.3);
+}
+
+.label { color: #3b82f6; font-weight: bold; text-transform: uppercase; font-size: 12px; display: block; margin-top: 25px; letter-spacing: 1px;}
+.data { display: block; margin-top: 5px; line-height: 1.6; font-size: 16px; color: #eee; }
+
+.code { 
+    background: #000; 
+    color: #00ff88; 
+    padding: 20px; 
+    border-left: 4px solid #3b82f6; 
+    font-family: 'Consolas', monospace; 
+    margin-top: 15px; 
+    border-radius: 5px;
+    position: relative;
+}
+
+.code::after { content: "_"; animation: blink 1s infinite; color: white; }
+@keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+.fuente { font-style: italic; color: #777; font-size: 12px; margin-top: 30px; display: block; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;}
+</style>
+
+<script>
+function escribirTexto(texto){
+    let i=0;
+    let elemento=document.getElementById("titulo");
+    elemento.innerText="";
+    function escribir(){
+        if(i<texto.length){
+            elemento.innerText+=texto.charAt(i);
+            i++;
+            setTimeout(escribir,40);
+        }
+    }
+    escribir();
+}
+
+function mostrar(term, def, rel, example, notes, source){
+    let content=document.querySelector(".content");
+    content.classList.remove("animar");
+    void content.offsetWidth;
+    content.classList.add("animar");
+
+    escribirTexto(term);
+    document.getElementById("def").innerText = def;
+    document.getElementById("rel").innerText = rel;
+    document.getElementById("ejemplo").innerText = example;
+    document.getElementById("notes").innerText = notes;
+    document.getElementById("source").innerText = source;
+}
+
+function filtrar(){
+    let input=document.getElementById("buscador").value.toUpperCase();
+    let botones=document.querySelectorAll(".menu button");
+    botones.forEach(btn=>{
+        btn.style.display = btn.innerText.toUpperCase().includes(input) ? "" : "none";
+    });
+}
+</script>
+</head>
+
+<body>
+<div class="nebula"></div>
+<canvas id="stars"></canvas>
+
+<header>
+    <div class="info-academica">
+        TECNOLÓGICO DE ESTUDIOS SUPERIORES DE JOCOTITLÁN (TESJO) <br>
+        Ingeniería en Sistemas Computacionales | Lenguajes de Interfaz | Docente: Jovani del Boque Florentino [cite: 2, 3]
+    </div>
+    <h1>🌌 Glosario Interactivo Digital: Unidad 2 [cite: 6, 29]</h1>
+    <div class="nombres">
+        <span>Héctor Daniel Garduño Flores</span>
+        <span>Rafael Ramirez Nolascco</span>
+        <span>Luis Enrique Angeles Ventura</span>
+        <span>Marcelo Hernandez Robles</span>
+        <span>Samuel Gonzales Romero</span>
+    </div>
+</header>
+
+<div class="container">
+    <div class="menu">
+        <input type="text" id="buscador" placeholder="Buscar mnemónico (Ej. MOV)..." onkeyup="filtrar()">
+        
+        <button onclick="mostrar('MOV', 'Copia el contenido de un operando fuente a un operando destino sin modificar el valor del operando fuente.', 'LEA, XCHG', 'MOV AX, BX ; Copia el valor del registro BX en AX', 'Esta instrucción no puede usar dos operandos de memoria directa.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">MOV</button>
+        <button onclick="mostrar('ADD', 'Suma el operando fuente al operando destino y almacena el resultado en el destino.', 'SUB, ADC', 'ADD AX, 10 ; Suma el valor inmediato 10 a AX', 'Modifica las banderas de estado: CF, ZF, SF, OF, AF, PF.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">ADD</button>
+        <button onclick="mostrar('SUB', 'Resta el operando fuente del operando destino y almacena el resultado en el destino.', 'ADD, SBB', 'SUB AX, 5 ; Resta el valor inmediato 5 a AX', 'Actualiza las banderas de estado según el resultado de la resta.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">SUB</button>
+        <button onclick="mostrar('MUL', 'Realiza una multiplicación sin signo entre el acumulador y el operando fuente.', 'IMUL', 'MUL BX ; Multiplica AX por BX (Resultado en DX:AX)', 'El operando destino es implícito (AX/AL) según el tamaño.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">MUL</button>
+        <button onclick="mostrar('DIV', 'Realiza la división sin signo del acumulador entre el operando fuente.', 'IDIV', 'DIV CX ; Divide DX:AX entre CX', 'El cociente se guarda en AX y el residuo en DX.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">DIV</button>
+        <button onclick="mostrar('INC', 'Incrementa en uno el valor del operando destino.', 'DEC, ADD', 'INC AX ; Incrementa el registro AX en 1', 'No afecta la bandera de acarreo (CF).', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">INC</button>
+        <button onclick="mostrar('DEC', 'Decrementa en uno el valor del operando destino.', 'INC, SUB', 'DEC BX ; Decrementa el registro BX en 1', 'No afecta la bandera de acarreo (CF).', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">DEC</button>
+        <button onclick="mostrar('CMP', 'Compara el operando destino con el fuente mediante una resta interna que no altera los valores.', 'SUB, JE, JNE', 'CMP AX, BX ; Compara si AX y BX son iguales', 'Actualiza las banderas para ser usadas por saltos condicionales.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">CMP</button>
+        <button onclick="mostrar('JMP', 'Transfiere el control del programa a una dirección específica de forma incondicional.', 'CALL', 'JMP etiqueta ; Salta a la instrucción marcada por la etiqueta', 'No depende de ninguna condición de bandera.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">JMP</button>
+        <button onclick="mostrar('JE', 'Salto condicional que se ejecuta si la bandera de cero (ZF) es igual a 1.', 'JZ, JNE', 'JE iguales ; Salta si el resultado anterior fue igual a cero', 'Se utiliza frecuentemente después de una instrucción CMP.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">JE</button>
+        <button onclick="mostrar('JNE', 'Salto condicional que se ejecuta si la bandera de cero (ZF) es igual a 0.', 'JNZ, JE', 'JNE distintos ; Salta si el resultado anterior no fue cero', 'Indica que los operandos comparados anteriormente no eran iguales.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">JNE</button>
+        <button onclick="mostrar('PUSH', 'Coloca un valor en el tope de la pila y decrementa el puntero de pila (SP).', 'POP', 'PUSH AX ; Guarda el valor de AX en el tope de la pila', 'El tamaño del operando debe ser de 16 o 32 bits.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">PUSH</button>
+        <button onclick="mostrar('POP', 'Extrae el valor del tope de la pila y lo coloca en el destino, incrementando SP.', 'PUSH', 'POP AX ; Recupera el valor de la pila y lo pone en AX', 'El registro SP se incrementa según el tamaño de la palabra.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">POP</button>
+        <button onclick="mostrar('CALL', 'Llama a un procedimiento guardando la dirección de retorno en la pila.', 'RET, JMP', 'CALL funcion ; Salta a la ejecución de funcion', 'Fundamental para la implementación de subrutinas.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">CALL</button>
+        <button onclick="mostrar('RET', 'Regresa de un procedimiento cargando la dirección de retorno desde la pila.', 'CALL', 'RET ; Finaliza subrutina y regresa al punto de llamada', 'Extrae la dirección IP previamente guardada por CALL.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">RET</button>
+        <button onclick="mostrar('AND', 'Realiza la operación lógica AND bit a bit entre los operandos.', 'OR, XOR', 'AND AX, 0Fh ; Realiza AND entre AX y el valor inmediato', 'Útil para aplicar máscaras de bits.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">AND</button>
+        <button onclick="mostrar('OR', 'Realiza la operación lógica OR bit a bit entre los operandos.', 'AND, XOR', 'OR AX, BX ; Combina los bits de AX y BX', 'Un bit resultado es 1 si cualquiera de los bits fuente es 1.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">OR</button>
+        <button onclick="mostrar('XOR', 'Realiza la operación lógica OR exclusiva bit a bit entre los operandos.', 'OR, NOT', 'XOR AX, AX ; Método eficiente para poner a cero AX', 'Si los bits son iguales el resultado es 0, si son distintos es 1.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">XOR</button>
+        <button onclick="mostrar('NOT', 'Invierte cada bit del operando destino (complemento a uno).', 'NEG', 'NOT AX ; Invierte todos los bits del registro AX', 'No afecta a ninguna bandera de estado.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">NOT</button>
+        <button onclick="mostrar('SHL', 'Desplaza los bits del operando a la izquierda rellenando con ceros.', 'SAL, SHR', 'SHL AX, 1 ; Desplaza bits a la izquierda (Multiplica x2)', 'El bit desplazado fuera se guarda en la bandera CF.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">SHL</button>
+        <button onclick="mostrar('SHR', 'Desplaza los bits del operando a la derecha rellenando con ceros.', 'SHL, SAR', 'SHR BX, 2 ; Desplaza BX dos posiciones a la derecha', 'Equivale a una división entera por potencias de 2.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">SHR</button>
+        <button onclick="mostrar('NOP', 'Instrucción que no realiza ninguna operación (No Operation).', 'WAIT', 'NOP ; Consume un ciclo de CPU sin realizar cambios', 'Se usa para temporización o alineación de código.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">NOP</button>
+        <button onclick="mostrar('LEA', 'Carga la dirección efectiva del operando fuente en el registro destino.', 'MOV', 'LEA DX, [BP+4] ; Carga la dirección del parámetro en DX', 'No accede a la memoria, solo calcula la dirección.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">LEA</button>
+        <button onclick="mostrar('XCHG', 'Intercambia el contenido del operando fuente con el operando destino.', 'MOV', 'XCHG AX, BX ; Intercambia los valores de AX y BX', 'No se permite memoria a memoria.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">XCHG</button>
+        <button onclick="mostrar('INT', 'Genera una interrupción de software para llamar a servicios del sistema.', 'HLT', 'INT 21h ; Llama a servicios de entrada/salida de DOS', 'Guarda flags e IP en la pila antes de ejecutar la rutina.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">INT</button>
+        <button onclick="mostrar('LOOP', 'Decrementa CX y salta a una etiqueta si CX no es cero.', 'DEC, JNZ', 'LOOP repetir ; Repite bloque si CX > 0', 'CX se usa como el contador de iteraciones automático.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">LOOP</button>
+        <button onclick="mostrar('HLT', 'Detiene la ejecución del procesador hasta la próxima interrupción externa.', 'INT', 'HLT ; Pone al procesador en estado de bajo consumo', 'Se usa frecuentemente al final de los programas.', '[1] Intel Corporation, Intel® 64 and IA-32 Architectures Software Developer’s Manual.')">HLT</button>
+    </div>
+
+    <div class="content">
+        <h2 id="titulo">Selecciona un Término [cite: 15]</h2>
+        
+        <span class="label">Definition (IEEE 610.12) [cite: 16]</span>
+        <span class="data" id="def">Utiliza el menú lateral para explorar las sentencias de la Unidad 2. [cite: 10, 11]</span>
+
+        <span class="label">Related terms [cite: 17]</span>
+        <span class="data" id="rel">-</span>
+
+        <span class="label">Usage example [cite: 19]</span>
+        <div class="code" id="ejemplo">; El fragmento de código aparecerá aquí [cite: 57]</div>
+
+        <span class="label">Notes / Contexto adicional [cite: 20]</span>
+        <span class="data" id="notes">-</span>
+
+        <span class="label">Source (Referencia IEEE) [cite: 33, 63]</span>
+        <span class="fuente" id="source">-</span>
+    </div>
+</div>
+
+<script>
+/* --- FONDO ANIMADO DE ESTRELLAS --- */
+const c=document.getElementById("stars");
+const ctx=c.getContext("2d");
+c.width=window.innerWidth;
+c.height=window.innerHeight;
+
+let stars=[];
+for(let i=0;i<150;i++){
+    stars.push({x:Math.random()*c.width, y:Math.random()*c.height, r:Math.random()*2});
+}
+
+function draw(){
+    ctx.clearRect(0,0,c.width,c.height);
+    ctx.fillStyle="rgba(255, 255, 255, 0.7)";
+    stars.forEach(s=>{
+        ctx.beginPath();
+        ctx.arc(s.x,s.y,s.r,0,Math.PI*2);
+        ctx.fill();
+        s.y+=0.25;
+        if(s.y>c.height){s.y=0;}
+    });
+    requestAnimationFrame(draw);
+}
+draw();
+
+/* Ajustar canvas al cambiar tamaño de ventana */
+window.addEventListener('resize', () => {
+    c.width=window.innerWidth;
+    c.height=window.innerHeight;
+});
+</script>
+</body>
+</html>
